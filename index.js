@@ -29,7 +29,14 @@ io.on('connection', function(socket) {
 		}
 		socket.emit('LED', json) //Gửi lệnh LED với các tham số của của chuỗi JSON
 		console.log("send LED")//Ghi ra console.log là đã gửi lệnh LED
-	}, 200)//200ms
+	}, 1000)//1000ms
+	
+	
+	//Khi nhận được lệnh LED_STATUS
+	socket.on('LED_STATUS', function(status) {
+		//Nhận được thì in ra thôi hihi.
+		console.log("recv LED", status)
+	})
 	
 	//Khi socket client bị mất kết nối thì chạy hàm sau.
 	socket.on('disconnect', function() {
