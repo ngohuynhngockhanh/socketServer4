@@ -18,43 +18,24 @@ function ParseJson(jsondata) {
     }
 }
 
-//Gửi dữ liệu thông qua 
-function sendTime() {
-	
-	//Đây là một chuỗi JSON
-	var json = {
-		khanh_dep_trai: "khanh dep trai", 	//kiểu chuỗi
-        ESP8266: 12,									//số nguyên
-		soPi: 3.14,										//số thực
-		time: new Date()							//Đối tượng Thời gian
-    }
-    io.sockets.emit('atime', json);
-}
-
 //Khi có mệt kết nối được tạo giữa Socket Client và Socket Server
-io.on('connection', function(socket) {	//'connection' (1) này khác gì với 'connection' (2)
+io.on('connection', function(socket) {	
 	//hàm console.log giống như hàm Serial.println trên Arduino
     console.log("Connected"); //In ra màn hình console là đã có một Socket Client kết nối thành công.
 	
-	//Gửi đi lệnh 'welcome' với một tham số là một biến JSON. Trong biến JSON này có một tham số và tham số đó tên là message. Kiểu dữ liệu của tham số là một chuối.
-    socket.emit('welcome', {
-        message: 'Connected !!!!'
-    });
-	
-	//Khi lắng nghe được lệnh "connection" với một tham số, và chúng ta đặt tên tham số là message. Mình thích gì thì mình đặt thôi.
-	//'connection' (2)
-    socket.on('connection', function(message) {
-        console.log(message);
-    });
-	
-	//khi lắng nghe được lệnh "atime" với một tham số, và chúng ta đặt tên tham số đó là data. Mình thích thì mình đặt thôi
-    socket.on('atime', function(data) {
-        sendTime();
-        console.log(data);
-    });
-	
-	socket.on('arduino', function (data) {
-	  io.sockets.emit('arduino', { message: 'R0' });
-      console.log(data);
-    });
+	var led = [true, false]
+	var interval1 = setInterval(function() {
+		for (var i = 0; i < led.length; i++) {
+			led[i] = !led[i]
+		}
+		var json = {
+			led: led
+		}
+		socket.emit('LED', json)
+		console.log("send LED")
+	}, 80)
+	socket.on('disconnect', function() {
+		console.log("disconnect")
+		clearInterval(interval1)
+	})
 });
