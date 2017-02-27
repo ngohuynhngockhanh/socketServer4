@@ -33,7 +33,7 @@ io.on('connection', function(socket) {
 		}
 		socket.emit('LED', json)
 		console.log("send LED")
-	}, 80)
+	}, 100)
 	socket.on('disconnect', function() {
 		console.log("disconnect")
 		clearInterval(interval1)
