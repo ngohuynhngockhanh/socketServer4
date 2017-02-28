@@ -38,6 +38,10 @@ io.on('connection', function(socket) {
 		console.log("recv LED", status)
 	})
 	
+	socket.on('RAIN', function(status) {
+		console.log("recv RAIN", status)
+	})
+	
 	//Khi socket client bị mất kết nối thì chạy hàm sau.
 	socket.on('disconnect', function() {
 		console.log("disconnect") 	//in ra màn hình console cho vui
